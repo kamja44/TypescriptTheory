@@ -284,3 +284,67 @@ const add1: Add = (a, b) => {
 }; // return 타입이 void가 된다.
 // return 타입이 void가 되기때문에 에러가 발생한다. Type '(a: number, b: number) => void' is not assignable to type 'Add'. Type 'void' is not assignable to type 'number'.
 ```
+
+# 3.1
+
+`overloading`
+
+- 함수가 서로 다른 여러개의 call signatures를 가지고 있을 때 발생한다.
+
+overloading의 예 1
+
+```js
+type Add = {
+    // a는 항상 number타입이지만 b는 number일 수도 있고 string일 수도 있다.
+    (a: number, b:number) : number
+    (a: number, b: string) : number
+}
+const add : Add = (a,b) => {
+    // a의 타입은 number로 고정되어있지만, b의 타입은 number 혹은 string이기에 if문을 사용하여 b의 타입을 확인해줘야한다.
+    if(typeof b === "string"){ // b의 타입이 string인 경우 a만 return 한다.
+        return a;
+    }
+    return a + b; // b의 타입이 number인 경우 a+b를 반환한다.
+}
+
+```
+
+overloading의 예 2
+
+```js
+type Config = {
+    path : string,
+    state : object
+}
+type Push = {
+    (path : string): void
+    (config: Config) : void
+}
+const push: Push = (config) => { // config의 타입 string 아니면 Config인지 TS가 추론한다. (parameter) config: string | Config
+    if(typeof config === "string"){ // config가 string일 경우
+        console.log(config);
+    }else{ // config가 Config타입일 경우
+        console.log(config.path)
+    }
+}
+```
+
+`overloading시 다른 여러 개의 argument를 가지고 있을 때의 효과`
+
+- 즉, 파라미터의 개수가 다를 때의 overloading
+
+```js
+type Add = {
+    (a: number, b: number) : number
+    (a: number, b: number, c: number) : number
+}
+const add: Add = (a,b,c?:number) => { // c를 number타입 or undefined타입으로 선언하여 c argument가 없을 경우 타입을 undefined로 설정한다.
+    if(c === "number"){
+        return a + b + c;
+    }else{
+        return a + b;
+    }
+}
+add(1,2);
+add(1,2,3);
+```
