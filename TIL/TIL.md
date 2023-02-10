@@ -187,3 +187,84 @@ const a: any[] = [1, 2, 3, 4];
 const b: any = true;
 a + b; // '1,2,3,4true' 출력 -> 타입을 any로 선언해서 TS의 보호장치를 사용하지 않았기에 가능
 ```
+
+# 2.4
+
+`TS에서만 존재하는 타입`
+
+1. unknown
+
+- 변수가 어떤 타입인지 모를경우 사용한다.
+  - 변수를 사용할 때 변수의 타입을 먼저 확인하는 과정이 필요하다.
+
+`unknown 타입 사용`
+
+```js
+let a: unknown;
+let b = a + 1; // Error 발생 a의 타입이 unknown이다. 'a' is of type 'unknown'.
+if (typeof a === "number") {
+  // a변수의 타입이 number인지 확인
+  let b = a + 1; // if문 안에서는 a는 number이기에 에러가 발생하지 않는다.
+}
+if (typeof a === "string") {
+  // a변수의 타입이 string인지 확인
+  let b = a.toUpperCASE();
+}
+```
+
+2. void
+
+- 아무것도 return하지 않는 함수를 대상으로 사용한다. - TS가 함수가 아무것도 return 하지 않는다는 것을 자동으로 추론한다. - 즉, 명시적으로 void 타입을 선언할 필요가 없다.
+  `void 타입 사용`
+
+```js
+// TS의 타입 추론
+function hello() {
+  // function hello(): void
+  console.log("void");
+}
+// void타입 명시적 선언
+function hi(): void {
+  console.log("void");
+}
+// void타입은 비어있는걸 의미한다. 즉, 아래와 같은 작업은 에러가 발생한다.
+hello().toUpperCase(); // hello() 함수가 아무것도 반환하지 않는 void 타입이기에 에러 발생 Property 'toUpperCase' does not exist on type 'void'.
+```
+
+3. never
+
+- 함수가 절대 return 하지 않을 때 발생한다.
+  - ex) 함수에서 exception(예외)가 발생할 때
+  - 즉, 오류가 발생하여 에러를 발생시킬 때 사용한다.
+- 타입이 두가지 일 수도 있는 상황에서도 발생한다.
+  `neve 타입 사용(함수가 절대 return 하지 않을 경우)`
+
+```js
+function hello(): never {
+  // hello 함수는 never 타입이라 return 하지 않는다.
+  return "X"; // string 타입을 return 하기에 에러 발생 Type 'string' is not assignable to type 'never'.
+}
+function Error(): never {
+  // error 함수는 never 타입이라 return 하지 않는다.
+  // 오류를 발생시키는 함수(throw new Error("발생시킬 오류 메시지"))
+  throw new Error("xxx"); // return을 하지 않고 오류를 발생시키는 함수
+}
+```
+
+`never 타입 사용(타입이 두 가지 일 수도 있는 상황)`
+
+```js
+function hello(name: string | number) {
+  if (typeof name === "string") {
+    // name의 타입이 string인지 확인 후 if문 진행
+    name; // name의 타입은 string (parameter) name: string
+  } else if (typeof name === "number") {
+    // name의 타입이 string타입이 아니라면 name의 타입이 number인지 확인 후 else if문 진행
+    name; // name의 타입은 number (parameter) name: number
+  } else {
+    // 이 부분의 코드는 절대 실행되지 않아야 한다.(string의 타입이 string과 number 둘 다 아니기 때문)
+    // name의 타입이 string타입도 아니고 number타입도 아니라면 name의 타입은 TS가 never 타입으로 추론
+    name; // name의 타입은 never (parameter) name: never
+  }
+}
+```
