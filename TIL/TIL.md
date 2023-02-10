@@ -268,3 +268,19 @@ function hello(name: string | number) {
   }
 }
 ```
+
+# 3.0
+
+`call signatures`
+
+- 함수를 구현하기 전에 타입을 만들 수 있고, 함수가 어떻게 동작하는지 서술할 수 있다.
+  - 즉, 타입을 먼저 생각하고 코드를 구현한다.
+
+```js
+type Add = (a: number, b: number) => number;
+const add: Add = (a, b) => a + b;
+const add1: Add = (a, b) => {
+  a + b;
+}; // return 타입이 void가 된다.
+// return 타입이 void가 되기때문에 에러가 발생한다. Type '(a: number, b: number) => void' is not assignable to type 'Add'. Type 'void' is not assignable to type 'number'.
+```
