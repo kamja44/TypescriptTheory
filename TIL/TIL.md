@@ -348,3 +348,70 @@ const add: Add = (a,b,c?:number) => { // c를 number타입 or undefined타입으
 add(1,2);
 add(1,2,3);
 ```
+
+# 3.2
+
+다형성
+
+- 변수들은 다양한 타입을 가질 수 있다.
+
+`다형성 적용 전 코드`
+
+```js
+type SuperPrint = {
+  (arr: number[]): void
+  (arr: boolean[]): void
+  (arr: string[]): void
+}
+const superPrint: SuperPrint = (arr) => {
+  arr.forEach(i => console.log(i));
+}
+superPrint([1,2,3,4])
+superPrint([true, false, true])
+superPrint(["a","b"])
+superPrint(["a","b",true]) // 2번째 index가 boolean이기에 에러 발생 No overload matches this call.Overload 3 of 3, '(arr: string[]): void', gave the following error.Type 'boolean' is not assignable to type 'string'.Overload 3 of 3, '(arr: string[]): void', gave the following error.Type 'number' is not assignable to type 'string'.
+```
+
+concrete type
+
+- 기존 알고 있는 타입들
+  - ex) number, string 등
+    generic type
+- TS가 타입을 유추한다.
+  - 즉, `call signature`를 작성할 때 무슨 타입이 들어올지 모를 때 generic type을 사용한다.
+  - `call signature`를 작성할때 들어올 타입을 알고 있다면 concrete type을 이용한다.
+
+`generic type 사용법[다형성 적용 코드]`
+
+1. TS에 generic type 사용을 선언한다.
+
+- `<generic 타입 이름>`
+
+```js
+type SuperPrint = {
+  // generic 타입의 이름을 TypePlaceholder로 설정
+  <TypePlaceholder>(arr: TypePlaceholder[]): void,
+};
+const superPrint: SuperPrint = (arr) => {
+  arr.forEach((i) => console.log(i));
+};
+superPrint([1, 2, 3, 4]);
+superPrint([true, false, true]);
+superPrint(["a", "b"]);
+superPrint(["a", "b", true, 1]); // 다형성 적용 전 에러가 발생하던 코드가 generic 타입 적용 후 에러가 발생하지 않는다. -> TS가 타입을 유추하기 때문
+// const superPrint: <string | boolean>(arr: (string | boolean)[]) => void
+```
+
+`generic type을 이용하여 함수의 리턴타입까지 변경하기[다형성 적용 코드]`
+
+```js
+type SuperPrint = {
+  // generic 타입의 이름을 TypePlaceholder로 설정
+  <TypePlaceholder>(arr: TypePlaceholder[]): TypePlaceholder,
+};
+const superPrint: SuperPrint = (arr) => arr[0];
+const a = superPrint([1, 2, 3, 4]); // const superPrint: <number>(arr: number[]) => number
+const b = superPrint([true, false, true]); // const superPrint: <number>(arr: number[]) => number
+const c = superPrint(["a", "b"]); // const superPrint: <string>(arr: string[]) => string
+const d = superPrint(["a", "b", true, 1]); // const superPrint: <string | number | boolean>(arr: (string | number | boolean)[]) => string | number | boolean
+```
