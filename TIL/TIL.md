@@ -415,3 +415,17 @@ const b = superPrint([true, false, true]); // const superPrint: <number>(arr: nu
 const c = superPrint(["a", "b"]); // const superPrint: <string>(arr: string[]) => string
 const d = superPrint(["a", "b", true, 1]); // const superPrint: <string | number | boolean>(arr: (string | number | boolean)[]) => string | number | boolean
 ```
+
+# 3.3
+
+`generic type 사용법 2(2개의 argument)`
+
+```js
+type SuperPrint = <T, M>(a: T[], b: M) => T; // TS는  함수의 첫 번째 파라미터로 배열이 오는 것(T[])을 알고, 두 번째 파라미터로는 M이 온다고 알고있다.
+
+const superPrint: SuperPrint = (arr) => arr[0];
+const a = superPrint([1, 2, 3, 4]); // SuperPrint는 2개의 argument를 기대하지만 한개의 arguemnt만 사용하기에 에러 발생 Expected 2 arguments, but got 1.
+const b = superPrint([1, 2, 3, 4], "true");
+```
+
+`TS는 generic을 처음 인식했을 때와 generic의 순서를 기반으로 generice의 타입을 알게된다.`
