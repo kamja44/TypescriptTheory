@@ -612,3 +612,66 @@ kamja.getNickName(); // protected 타입은 상속받은 객체(자식 클래스
 `private`
 
 - 해당 클래스 내에서만 접근 가능(자식 클래스(상속받은 클래스)에서도 접근 불가)
+
+# 4.1
+
+`hashMap 만들기`
+
+- 해싱 알고리즘 이용
+- 사전에 새 단어를 추가하고, 단어를 찾고, 단어를 삭제하는 메소드 만들기
+
+```js
+type Words = {
+  [key : string] : string // Words 타입이 string만을 property로 가지는 오브젝트라고 명시한다.
+  // 즉, 객체의 키는 string 타입, 값도 string 타입이여야한다.
+  // [key : string] : string에서 key의 이름은 변경되어도 상관없다 [x : string] : string이라고 해도 위의 코드와 동일하게 동작한다.
+  // 제한된 양의 property 혹은 key를 가지는 타입을 정의하는 방법이다.
+  // 즉, object의 타입을 선언해야할 때 유용하다.
+}
+let EX : Words = {
+  "kamja" : "kokuma", // string : string
+  2 : "kokuma",  // number : string  Error 발생 키는 string 타입이여야 한다.
+}
+class Dict {
+  private words : Words // property가 constructor(생성자)부터 바로 초기화되지 않는다.
+  constructor(){ // words를 수동으로 초기화
+    this.words = {}
+  }
+  add(word : Word){ // 클래스를 타입처럼 사용할 수 있다.
+    if(this.words[word.term] === undefined){
+      // 주어진 단어가 아직 사전에 존재하지 않음을 의미한다.
+      this.words[word.term] = word.def;
+    }
+  }
+  def(term : string){
+    // 단어 출력
+    return this.words[term];
+  }
+  update(word : Word){
+    if(this.words[word.term] === undefined){
+      this.add(word);
+    }else{
+      this.words[word.term] = word.def;
+    }
+  }
+  del(term : string){
+    if(this.words[term] !== undefined){
+      delete this.words[term];
+    }
+  }
+}
+class Word {
+  constructor(
+    public term : string,
+    public def : string
+  ){}
+}
+const kamja = new Word("kamja","캄자");
+const dict = new Dict();
+dict.add(kamja);
+dict.def("kamja");
+dict.update(new Word("kamja","kamja44"));
+console.log(`캄자 -> ${dict.def("kamja")}`);
+dict.del("kamja");
+console.log(`kamja is gone ${dict.def("kamja")}`);
+```
