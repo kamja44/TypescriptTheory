@@ -429,3 +429,79 @@ const b = superPrint([1, 2, 3, 4], "true");
 ```
 
 `TS는 generic을 처음 인식했을 때와 generic의 순서를 기반으로 generice의 타입을 알게된다.`
+
+# 3.4
+
+`generic type은 대문자로 시작해야 한다.`
+`타입을 생성하고 그 타입을 또다른 타입에 넣어서 사용할 수 있다.`
+`타입에 타입을 넣는 방법 1`
+
+```js
+type Player<E> = {
+  name : string
+  extraInfo: E
+}
+// extraInfo에 object가 들어간다.
+const kamja : Player<{favFood: string}> = {
+  name : "kamja",
+  extraInfo : {
+    favFood : "kokuma"
+  }
+}
+```
+
+`타입에 타입을 넣는 방법 2`
+
+```js
+type Player<E> = {
+  name : string
+  extraInfo: E
+}
+type kamjaPlayer = Player<{favFood : string}>
+const kamja : kamjaPlayer{
+  name : "kamja",
+  extraInfo : {
+    favFood : "kokuma"
+  }
+}
+```
+
+`타입에 타입을 넣는 방법 3`
+
+```js
+type Player<E> = {
+  name : string
+  extraInfo: E
+}
+type kamjaExtra = {
+  favFood : string
+}
+type kamjaPlayer = Player<kamjaExtra>
+const kamja : kamjaPlayer{
+  name : "kamja",
+  extraInfo : {
+    favFood : "kokuma"
+  }
+}
+```
+
+`큰 타입을 하나 가지고 있는데 그 중 하나가 달라질 수 있는 타입이라면 그 타입을 generic 타입으로 선언하면 타입을 재사용할 수 있다.`
+`generic type의 재활용`
+
+```js
+type Player<E> = {
+  name : string
+  extraInfo: E
+}
+const kamja : Player<{favFood : string}>{
+  name : "kamja",
+  extraInfo : {
+    favFood : "kokuma"
+  }
+}
+// extraInfo가 null인 kokuma 상수 생성
+const kokuma : Player<null>{
+  name : "kokuma",
+  extraInfo : null
+}
+```
