@@ -675,3 +675,101 @@ console.log(`캄자 -> ${dict.def("kamja")}`);
 dict.del("kamja");
 console.log(`kamja is gone ${dict.def("kamja")}`);
 ```
+
+# 4.2
+
+`readonly`
+
+- 타입을 지정할때 readonly를 사용하면 읽기전용이 된다.
+  - 즉, 내용을 수정할 수 없다.
+  - TS의 readonly는 JS에 존재하지 않는다.
+
+```js
+class Word {
+  constructor(
+    public readonly term : string,
+    public readonly def : string
+  ){}
+}
+const kamja = new Word("kamja","캄자");
+kamja.term = "kokuma"; // term, def는 readonly이기에 수정이 불가능하다. Cannot assign to 'term' because it is a read-only property.
+```
+
+`concrete 타입의 특정 값 명시하기`
+
+```js
+type Team = "red" | "blue" | "yellow";
+type Health = 1 | 5 | 10
+type Player = {
+  nickname : string,
+  team : Team // team은 red, blue, yellow만 될 수 있다.
+  health : Health // health는 1, 5, 10만 될 수 있다.
+}
+const kamja : Player = {
+  nickname : "kamja",
+  // team : "coral", // Error발생 team은 red, blue, yellow 3개 중 하나의 값만 가질 수 있다. Type '"coral"' is not assignable to type 'Team'.
+  team : "red",
+  // health : 9 // ERROR발생 health는 1, 5, 10 3개 중 하나의 값만 가질 수 있다. Type '9' is not assignable to type 'Health'.
+  health : 10,
+}
+```
+
+`interface`
+
+- type과 동일한 역할을 한다.
+  - 단, 오브젝트의 모양을 특정하기 위한 역할만 한다.
+    - 즉, 인터페이스를 TS에게 오브젝트의 모양을 설명할 때만 사용할 수 있다.
+- interface는 객체 지향 프로그ㅐ밍의 개념을 활용하여 개발되었다.
+
+```js
+interface Player {
+  nickname: string;
+  team: string;
+  health: number;
+}
+type Player = {
+  nickname: string,
+  team: string,
+  health: number,
+};
+// interface와 Player 코드는 동일한 역할을 수행한다.
+```
+
+`interface의 상속`
+
+- interface는 클래스처럼 동작한다.
+
+```js
+interface User {
+  name : string
+  readonly read : string
+}
+interface Player extends User{
+}
+const kamja : Player = {
+  name : "kamja"
+}
+```
+
+`interface의 property 축적`
+
+```js
+interface User {
+  name: string;
+}
+interface User {
+  age: number;
+}
+interface User {
+  location: string;
+}
+// TS가 동일한 인터페이스를 하나로 합쳐준다.
+// 즉, 같은 인터페이스에 다른 이름을 가진 property 들을 쌓을 수 있다.
+const kamja: User = {
+  name: "kamja",
+  age: 20,
+  location: "KOR",
+};
+```
+
+`type은 interface보다 유연하다 -> 사용할 수 있는 기능이 많다.`
