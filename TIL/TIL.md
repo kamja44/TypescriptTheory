@@ -505,3 +505,110 @@ const kokuma : Player<null>{
   extraInfo : null
 }
 ```
+
+# 4.0
+
+`TS를 이용한 객체지향 프로그래밍`
+`TS에서 클래스 생성방법`
+
+```js
+class Player{ // Player class
+  constructor( // 파라미터들만 쓰면 TS가 알아서 Constructor(생성자) 함수를 생성한다.
+    private firstName : string,
+    private lastName : string,
+    public nickname : string
+  ) {}
+}
+const kamja = new Player("kamja","44","캄자");
+kamja.firstName; // Error발생 Property 'firstName' is private and only accessible within class 'Player'. Property 'lastName' is declared but its value is never read.
+kamja.nickname; // "캄자"
+```
+
+`추상클래스`
+
+- 추상 클래스는 오직 다른 클래스가 상속받을 수 있는 클래스이다.
+  - 단, 추상 클래스는 직접 새로운 인스턴스를 만들 순 없다.
+  - 즉, 추상 클래스는 오직 다른곳에서 상속받을수만 있는 클래스이다.
+
+```js
+abstract class User{
+  constructor(
+    private firstName : string,
+    private lastName : string,
+    public nickname : string
+  ) {}
+  getFullName(){
+    return `${this.firstName}${this.lastName}`
+  }
+}
+class Player extends User{
+
+}
+const kamja = new User("kamja","44","캄자"); // Error 발생 Cannot create an instance of an abstract class.
+// 추상 클래스는 직접 새로운 인스턴스를 만들 수 없다.
+const kamja = new Player("kamja","44","캄자");
+// Player클래스가 User 추상 클래스를 상속받았으므로 kamja는 getFullName() 메서드를 사용할 수 있다.
+kamja.getFullName(); // "kamja44"
+```
+
+`메소드`
+
+- 클래스 안에 존재하는 함수이다.
+
+`추상 메소드`
+
+- 추상 메소드는 추상 클래스를 상속받는 모든 것들이 구현을 해야하는 메소드를 의미한다.
+  - 즉, 추상 클래스를 상속하는 클래스에서 추상 메서드를 구현한다.
+- 추상 클래스 안에서는 추상 메소드를 만들 수 있다.
+  - 단, 메소드를 직접 구현해서는 안되며 메소드의 call signature만 적어둬야 한다.
+  - 즉, 추상 메소드를 만들려면 메소드를 클래스 안에서 구현하지 않으면 된다.
+  - 추상 메소드는 arguement를 가질 수 있다.
+
+```js
+abstract class User{
+  constructor(
+    private firstName : string, // private는 외부에서 접근 불가, 자식 클래스(상속받은 클래스)도 접근 불가
+    private lastName : string, // private는 외부에서 접근 불가, 자식 클래스(상속받은 클래스)도 접근 불가
+    private nickname : string, // private는 외부에서 접근 불가, 자식 클래스(상속받은 클래스)도 접근 불가
+    protected protectedNickname : string // private는 외부에서 접근 불가, 자식 클래스(상속받은 클래스)도 접근 가능
+  ) {}
+  abstract getNickName() : void // 메소드의 call signature만 가지고 있다. 즉, getNickName은 추상 메소드이다.
+  getFullName(){
+    return `${this.firstName}${this.lastName}` // 메소드의 구현 부분
+  }
+}
+class Player extends User{
+  // Player class는 User 추상 클래스를 상속받는다.
+  // User 추상 클래스에는 추상 메서드인 getNickName()이 있다.
+  // 즉, Player 클래스는 getNickName을 구현해야한다.
+  getNickName(){
+    console.log(this.protectedNickname); // protectedNickName이 protected이기에 상속받은 클래스에서 접근이 가능하다.
+  }
+}
+const kamja = new Player("kamja","44","캄자", "protected캄자");
+kamja.protectedNickname // protectednickname이 private이기에 Error발생 Property 'protectedNickname' is protected and only accessible within class 'User' and its subclasses.
+kamja.getNickName(); // protected 타입은 상속받은 객체(자식 클래스)에서는 접근이 가능하다.
+```
+
+필드가 외부로부터는 보호되지만 자식 클래스에서는 사용하고 싶다면 `private`를 사용하면 안된다.
+`private` 대신 `protected`를 사용하면 필드가 외부로부터 보호되고, 자식 클래스에서 필드의 사용이 가능하다.
+
+### public, protected, private 구분
+
+|           | 선언한 클래스 내에서 접근 | 상속받은 클래스(자식 클래스) 내에서 접근 | 인스턴스 |
+| :-------: | :-----------------------: | :--------------------------------------: | :------: |
+|  public   |            ⭕             |                    ⭕                    |    ⭕    |
+| protected |            ⭕             |                    ⭕                    |    ❌    |
+|  private  |            ⭕             |                    ❌                    |    ❌    |
+
+`public`
+
+- 모든 클래스에서 접근 가능
+
+`protected`
+
+- 해당 클래스와 자식 클래스(상속받은 클래스)에서 접근 가능
+
+`private`
+
+- 해당 클래스 내에서만 접근 가능(자식 클래스(상속받은 클래스)에서도 접근 불가)
