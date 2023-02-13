@@ -923,3 +923,48 @@ type과 interface의 차이점
 <br>
 
 `타입은 새 property를 추가하기 위해 다시 선언될 수 없지만 interface는 항상 다시 선언될 수 있다.`
+
+# 4.5
+
+`다형성, 제네릭, 클래스, 인터페이스 모두 합치기`
+다형성
+
+- 다른 모양의 코드를 가질 수 있게 한다.
+  - 다형성을 이루기 위해서 제네릭을 사용한다.
+
+제네릭
+
+- concrete 타입이 아닌 placeholder 타입 즉, TS가 타입을 추론한다.
+- 제네릭은 다른 타입에게 상속이 가능하다.
+
+```js
+// Storage interface
+// TS에 의해 이미 선언된 JS의 웹 스토리지 API를 위한 인터페이스이다.
+interface Storage{ // 즉, Storage에 새 property를 추가한다.(기존 Storage인터페이스를 상속받는다.)
+}
+interface SStorage<T>{
+  [key : string] : T // key가 제한되지 않은 Object를 정의하게 해준다.
+}
+class LocalStorage<T> { // generic type인 T를 클래스로 보내고 클래스는 제네릭을 인터페이스로 보낸다.
+  private storage : SStorage<T> = {}
+  set(key : string, value : T){ // 스토로지 저장
+    this.storage[key] = value;
+  }
+  remove(key : string){ // 스토로지 제거
+    delete this.storage[key]
+  }
+  get(key : string) : T { // 스토로지 가져오기
+    return this.storage[key]
+  }
+  clear(){ // 스토로지 비우기
+    this.storage = {}
+  }
+}
+
+const stringStorage = new LocalStorage<string>() // constructor LocalStorage<string>(): LocalStorage<string>
+stringStorage.get("ket") // const stringStorage: LocalStorage<string>
+stringStorage.set("hello", "how are you?")
+const booleansStorage = new LocalStorage<boolean>() // constructor LocalStorage<boolean>(): LocalStorage<boolean>
+booleansStorage.get("xxx") // const booleansStorage: LocalStorage<boolean>
+booleansStorage.set("hello", true)
+```
