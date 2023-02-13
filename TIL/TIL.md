@@ -855,3 +855,71 @@ class Player implements User, Human{ // 인터페이스 여러개 동시 상속
   }
 }
 ```
+
+# 4.4
+
+Recap
+`인터페이스는 개발자가 원하는 메소드와 property를 클래스가 가지도록 강제할 수 있다.`
+
+<br>
+
+`타입 키워드를 사용하여 타입 상속받기`
+
+```js
+type PlayerA = {
+  name: string,
+};
+type PlayerAA = PlayerA & {
+  lastName: string,
+};
+const playerA: PlayerA = {
+  name: "kamja",
+  lastName: "kokuma",
+};
+```
+
+`interface를 사용하여 interface 상속받기`
+
+```js
+interface PlayerB {
+  name: string;
+}
+interface PlayerBB extends PlayerB {
+  lastName: string;
+}
+interface PlayerBB {
+  health: number;
+}
+const playerB: PlayerB = {
+  name: "kamja",
+};
+```
+
+`타입과 인터페이스는 모두 동일하게 동작한다.`
+
+```js
+type PlayerA = {
+  firstName : string
+}
+interface PlayerB{
+  firstName : string
+}
+class User implements PlayerB{
+  constructor(
+    public firstName : string
+  )
+}
+class User1 implements PlayerA{
+  constructor(
+    public firstName : string
+  )
+}
+```
+
+type과 interface의 차이점
+
+`클래스나 오브젝트의 모양을 정의하고 싶으면 interface를 사용하고 나머지의 경우에는 type을 사용한다.`
+
+<br>
+
+`타입은 새 property를 추가하기 위해 다시 선언될 수 없지만 interface는 항상 다시 선언될 수 있다.`
