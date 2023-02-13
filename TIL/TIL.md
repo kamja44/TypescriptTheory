@@ -773,3 +773,85 @@ const kamja: User = {
 ```
 
 `type은 interface보다 유연하다 -> 사용할 수 있는 기능이 많다.`
+
+# 4.3
+
+`추상 클래스를 인터페이스로 변경`
+
+`추상 클래스`
+
+```js
+abstract class User {
+  constructor(
+    protected firstname : string,
+    protected lastName : string
+  ){}
+  abstract sayHi(name : string) : string
+  abstract fullName() : string
+}
+class Player extends User {
+  fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
+  sayHi(name : string){
+    return `Hello ${name}. My name is ${this.fullName()}`
+  }
+}
+```
+
+`인터페이스 상속`
+
+- 인터페이스를 상속할 때에는 property를 private으로 만들지 못한다.(protected로도 만들지 못한다.)
+  - 즉, 인터페이스를 상속할때 property는 public으로 생성해야 한다.
+- 인터페이스 상속 시 implements 키워드를 사용하는데 이는 TS에서만 지원한다.
+  - 인터페이스를 상속하면 추상 클래스를 추가로 사용하지 않기에 TS에서 JS로 변환 시 파일의 사이즈를 줄일 수 있다.
+
+```js
+interface User{
+  firstName : string,
+  lastName : string,
+  sayHi(name : string) : string,
+  fullName() : string,
+}
+class Player implements User{ // implements는 TS에만 존재하고 JS에는 존재하지 않는다.
+  constructor(
+    public firstName : string,
+    public lastName : string,
+  ){}
+  fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
+  sayHi(name : string){
+    return `Hello ${name}. My name is ${this.fullName()}`
+  }
+}
+```
+
+`여러개의 인터페이스 동시에 상속`
+
+- 하나의 클래스에서 여러개의 인터페이스를 동시에 상속이 가능하다.
+
+```js
+interface User{
+  firstName : string,
+  lastName : string,
+  sayHi(name : string) : string,
+  fullName() : string,
+}
+interface Human {
+  health : number
+}
+class Player implements User, Human{ // 인터페이스 여러개 동시 상속
+  constructor(
+    public firstName : string,
+    public lastName : string,
+    public health : number,
+  ){}
+  fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
+  sayHi(name : string){
+    return `Hello ${name}. My name is ${this.fullName()}`
+  }
+}
+```
