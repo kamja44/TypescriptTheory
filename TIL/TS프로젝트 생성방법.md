@@ -70,3 +70,28 @@
 6. npm run build 명령어를 사용하여 script를 실행한다.
 
 - build 폴더가 생긴걸 확인할 수 있다.
+
+7. myPackage.js 파일 생성
+
+8. tsconfig.json 파일 설정
+
+```js
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "outDir": "build",
+    "target": "ES6",
+    "lib": ["ES6", "DOM"],
+    "strict" : true,
+    // strict를 true로 설정하면 TS가 코드를 보호할 수 있다. 즉, 정의 파일이 없는 경우에도 에러를 발생시킨다.
+  }
+}
+```
+
+`정의 파일`
+
+- 정의 파일은 JS코드의 모양을 TS에 설명해주는 파일이다.
+  - 정의 파일은 d.ts에 작성한다.
+    - myPackage.d.ts라는 파일을 만든 후 정의 파일을 작성한다.
+
+9. 정의 파일 작성(myPackage.d.ts)
