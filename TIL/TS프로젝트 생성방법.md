@@ -41,6 +41,7 @@
     // outDir은 JS 파일이 생성될 디렉터리를 지정한다. 즉, 컴파일된 JS 코드를 build라는 폴더에 넣는다고 명시한다.
     "esModuleInterop" : true,
     // ES6 모듈 사양을 준수하여 CommonJS 모듈을 가져올 수 있게 된다.
+    "module" : "CommonJS"
     "target": "ES6",
     // tager은 어떤 버전의 JS로 TS를 컴파일할지 지정할 수 있다.
     "lib": ["ES6", "DOM"],
