@@ -181,3 +181,26 @@ function hello(name: sring | number) {
   }
 }
 ```
+
+# call signatures
+
+- 함수 위에 마우스를 올렸을 때 보게 되는 것을 말한다.
+  - call signatures는 함수를 어떻게 호출해야 하는지 알려준다.
+    - 즉, 함수의 argument 타입과 함수의 반환 타입을 알려준다.
+
+```js
+const add = (a: number, b: number) => a + b;
+// 위의 함수에 마우스를 올리면  `cosnt add: (a: number, b: number) => number `이 보인다. 이것이 call signatures이다.
+// 즉, 함수를 call signatures 방식으로 호출해야 하는 것을 알려준다.
+```
+
+## 나만의 call signature 선언방법
+
+- 함수의 call signature 타입 생성
+
+```js
+type Add = (a: number, b: number) => number; // call signature 타입 생성
+
+const add: Add = (a, b) => a + b; // TS에게 add 함수의 a와 b의 argument가 number 타입이라고 명시할 필요가 없다.
+// Add 타입을 이용하여 call signature를 선언했기 때문
+```
