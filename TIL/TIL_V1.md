@@ -301,3 +301,5 @@ superPrint([true, false, true]);
 superPrint(["a", "b", "c"]);
 superPrint([1, 2, true, false, "a"]);
 ```
+
+- TS는 generic이 처음 사용되는 지점을 기반으로 타입이 무엇인지 추론한다.
