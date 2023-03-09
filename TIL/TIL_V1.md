@@ -204,3 +204,62 @@ type Add = (a: number, b: number) => number; // call signature 타입 생성
 const add: Add = (a, b) => a + b; // TS에게 add 함수의 a와 b의 argument가 number 타입이라고 명시할 필요가 없다.
 // Add 타입을 이용하여 call signature를 선언했기 때문
 ```
+
+# Overloading
+
+- 함수가 여러개의 call signatures를 가지고 있을 때 발생한다.
+
+- 오버로딩 예 1
+
+```js
+type Add = {
+    (a: number, b: number) : number
+    (a: number, b: string) : number
+}
+const add: Add = (a, b ) => {
+    // b는 Add 타입의 정의에 의해 number or string이다.
+    if(typeof b === "string") return a; // b의 타입이 string일 경우의 동작을 정의한다.
+    return a + b; // b의 타입이 number일 경우의 동작을 정의한다.
+}
+```
+
+- 오버로딩 예 2
+
+```js
+type Config = {
+  path : string,
+  state : object
+}
+type Push = {
+  (path: string):void
+  (config: Config) : void
+}
+
+const push: Push = (config) => {
+  if(typeof config === "string"){
+    console.log(config) // config 매개변수가 string 타입일 경우의 동작
+  }else{
+    console.log(config.path) // config 매개변수가 Config 타입 객체일 경우의 동작
+    // 즉, config 매개변수는 path와 state 값을 가질 수 있다.
+  }
+}
+```
+
+- 여러개의 argument를 가지고 있을 때의 오버로딩
+  - 즉, 파라미터의 개수가 다를때 일어나는 경우
+
+```js
+type Add = { // Add 타입은 서로 다른 call signatures와 파라미터의 개수도 다르다.
+  (a: number, b: number): number
+  (a: number, b: number, c: number): number
+}
+
+// add 함수를 호출할 때 a와 b는 공통으로 호출하지만 c는 옵션이다. 즉, c의 옵션을 명시적으로 지정해줘야 오류가 발생하지 않는다.
+// c ?: number; c의 타입을 옵셔널로 지정하며 number 타입으로 지정한다.
+const add: Add = (a, b, c ?: number) => {
+  if(c) return a + b + c;
+  return a + b;
+}
+add(1, 2)
+add(1, 2, 3)
+```
