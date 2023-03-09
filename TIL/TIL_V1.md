@@ -263,3 +263,41 @@ const add: Add = (a, b, c ?: number) => {
 add(1, 2)
 add(1, 2, 3)
 ```
+
+# Polymorphism
+
+- 여러가지 다른 구조들
+
+- 다형성 예제
+
+```js
+type SuperPrint = {
+  (arr: number[]): void
+  (arr: boolean[]): void
+}
+const superPrint: SuperPrint = (arr) => {
+  arr.forEach(i => console.log(i));
+}
+superPrint([1,2,3,4]);
+superPrint([true, false, true]);
+```
+
+# generic
+
+- 타입의 placeholder와 비슷하다
+  - 즉, TS가 타입을 유추한다.
+    - call signature를 작성할 때, call signature에 들어올 확실한 타입을 모를 때 generice을 사용한다.
+
+generic 사용예제
+
+```js
+type SuperPrint = {
+  <TypePlaceholder>(arr: TypePlaceholder[]): TypePlaceholder,
+  // TS가 TypePlacehoder자리에 추론한 타입을 넣는다.
+};
+const superPrint: SuperPrint = (arr) => arr[0];
+superPrint([1, 2, 3, 4]);
+superPrint([true, false, true]);
+superPrint(["a", "b", "c"]);
+superPrint([1, 2, true, false, "a"]);
+```
