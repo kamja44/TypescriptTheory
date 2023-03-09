@@ -132,3 +132,52 @@ player[0] = "hi" // Error player배열이 readonly이기 때문이다.
 # any 타입
 
 - any타입은 TS의 모든 보호장치를 비활성화시킨다.
+
+# TS에만 존재하는 타입
+
+## unknown 타입
+
+- unknown 타입을 사용하기 위해선 먼저 타입을 체크해야 한다.
+
+```js
+let a: unknown;
+let b = a + 1; // Error unknown타입인 a를 사용하기 위해선 먼저 a의 타입을 체크해야 한다.
+if (typeof a === "number") {
+  let b = a + 1;
+}
+if (typeof a === "string") {
+  let b = a.toUpperCase();
+}
+```
+
+## void 타입
+
+- 아무것도 return하지 않는 함수를 대상으로 사용한다.
+  - 함수가 아무것도 return하지 않을 경우 TS가 자동으로 함수를 void 타입으로 추론한다.
+
+## never 타입
+
+- 함수가 절대 return하지 않을 때 발생한다.
+
+- never 타입 사용 예 1
+
+```js
+function hello(): never {
+  // return "x" // never 타입은 함수가 return 값을 가질 수 없다.
+  throw new Error("xxx"); // hello 함수가 return값을 갖지 않으니 에러가 발생하지 않는다.
+}
+```
+
+- never 타입 사용 예 2
+
+```js
+function hello(name: sring | number) {
+  // name은 string, number 2가지 타입을 가질 수 있다.
+  if (typeof name === "string") {
+  } else if (typeof name === "number") {
+  } else {
+    name; // name의 타입이 string, number 둘 다 아니므로 name의 타입은 never이다.
+    // 즉, 타입이 올바르게 들어왔다면 else문은 절대 실행되지 않는다.
+  }
+}
+```
