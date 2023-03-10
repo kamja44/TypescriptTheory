@@ -19,6 +19,8 @@
 8. [Polymorphism](#polymorphism)<br>
 9. [Generic](#generic)<br>
 10. [추상 클래스(abstract class), 추상 메소드](#추상-클래스abstract-class-추상-메소드)<br>
+11. [private, protected, public 구분](#private-protected-public-구분)<br>
+12. [해시맵 만들기](#해시맵-만들기)<br>
 
 # TS 기본 타입
 
@@ -404,3 +406,45 @@ kamja.getFullName() // Player 클래스는 User 추상 클래스를 상속받았
 |  private  |        ⭕        |         ❌         |    ❌    |
 | protected |        ⭕        |         ⭕         |    ❌    |
 |  public   |        ⭕        |         ⭕         |    ⭕    |
+
+`추상 클래스, 추상 메소드, protected, public, private 등은 TS에서만 제공하는 기능들이다.`
+
+- 즉, JS로 컴파일 되면 추상 클래스로 인스턴스를 생성할 수 있다.
+
+# 해시맵 만들기
+
+## Object의 타입 선언하기
+
+```js
+// Object의 타입을 선언해야할 때 사용한다.
+type Words = { // Words 타입이 string만을 property로 가지는 오브젝트라고 명시한다.
+  [key: string] : string // 제한된 양의 property 혹은 key를 가지는 타입을 정의해 주는 방법이다.
+}
+
+class Dict{ // 사전이 words 오브젝트를 가진다고 알려준다.
+  private words: Words // Constructor 에서 직접 초기화 되지 않는 property
+  constructor(){
+    this.words = {} // constructor에서 words를 수동으로 초기화
+  }
+  add(word: Word){ // Word 클래스를 타입처럼 사용
+  // 즉, word 클래스를 타입으로 사용
+    if(this.words[word.term] === undefined){
+      this.words[word.term] = word.def;
+    }
+  }
+  def(term: string){
+    return this.words[term]
+  }
+}
+
+// 단어를 만드는 Word 클래스
+class Word{
+  constructor(
+    public trem: string,
+    public def: string
+  ){}
+}
+const kamja = new Word("kamja", "감자"); // 단어 생성
+Dict.add(kamja); // 생성한 dictionary에 단어 추가
+Dict.def("kamja"); // kamja 단어 찾기
+```
