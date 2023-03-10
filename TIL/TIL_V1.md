@@ -396,3 +396,11 @@ const kamja = new Player("k","a","mja");
 const kokuma = new User("ko","ku","ma"); // Error 추상 클래스는 직접 인스턴스를 생성할 수 없다.
 kamja.getFullName() // Player 클래스는 User 추상 클래스를 상속받았으므로 getFullName()을 사용할 수 있다.
 ```
+
+# private, protected, public 구분
+
+|           | 선언한 클래스 내 | 상속받은 클래스 내 | 인스턴스 |
+| :-------: | :--------------: | :----------------: | :------: |
+|  private  |        ⭕        |         ❌         |    ❌    |
+| protected |        ⭕        |         ⭕         |    ❌    |
+|  public   |        ⭕        |         ⭕         |    ⭕    |
