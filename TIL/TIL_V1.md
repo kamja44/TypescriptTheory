@@ -1,3 +1,25 @@
+1. [TS 기본 타입](#ts-기본-타입)<br>
+   &nbsp;&nbsp;1-1. [Object의 타입 정의 1](#object의-타입-정의-1)<br>
+   &nbsp;&nbsp;1-2. [Object의 타입 정의 2](#object의-타입-정의-2)<br>
+   &nbsp;&nbsp;1-3. [함수의 return 타입 지정](#함수의-return-타입-지정)<br>
+   &nbsp;&nbsp;1-4. [Arrow Function 사용 시 타입 지정 방법](#arrow-function-사용-시-타입-지정-방법)<br>
+2. [readonly 속성을 타입에 추가](#readonly-속성을-타입에-추가)<br>
+   &nbsp;&nbsp;2-1. [객체의 요소를 readonly로 설정](#객체의-요소를-readonly로-설정)<br>
+   &nbsp;&nbsp;2-2. [배열을 readonly로 설정](#배열을-readonly로-설정)<br>
+3. [Tuple](#tuple)<br>
+   &nbsp;&nbsp;3-1. [Tuple과 readonly 같이 사용](#tuple과-readonly-같이-사용)<br>
+4. [any 타입](#any-타입)<br>
+5. [TS에만 존재하는 타입](#ts에만-존재하는-타입)<br>
+   &nbsp;&nbsp;5-1. [unknown 타입](#unknown-타입)<br>
+   &nbsp;&nbsp;5-2. [void 타입](#void-타입)<br>
+   &nbsp;&nbsp;5-3. [never 타입](#never-타입)<br>
+6. [call signatures](#call-signatures)<br>
+   &nbsp;&nbsp;6-1. [나만의 call signature 선언 방법](#나만의-call-signature-선언방법)<br>
+7. [Overloading](#overloading)<br>
+8. [Polymorphism](#polymorphism)<br>
+9. [Generic](#generic)<br>
+10. [추상 클래스(abstract class), 추상 메소드](#추상-클래스abstract-class-추상-메소드)<br>
+
 # TS 기본 타입
 
 - 타입은 항상 변수명 뒤에 콜론을 작성한 후 작성한다.
@@ -303,3 +325,74 @@ superPrint([1, 2, true, false, "a"]);
 ```
 
 - TS는 generic이 처음 사용되는 지점을 기반으로 타입이 무엇인지 추론한다.
+
+# Class
+
+- TS는 파라미터들을 써주기만 하면 TS 가 알아서 Constructor 함수를 만들어준다.
+
+```js
+class Player{
+  constructor(
+    private firstName: string,
+    private lastName: string
+  )
+}
+```
+
+- 위의 TS코드는 아래의 JS 코드로 컴파일된다.
+
+```js
+"use strict";
+calss Player{
+  constructor(firstName, lastName){
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+}
+```
+
+```js
+class Player{
+  constructor(
+    private firstName: string,
+    private lastName: string,
+    public nickname: string
+  ){}
+}
+const kamja = new Player("k","a","mja");
+// firstName과 lastName은 private이므로 외부에서 접근이 불가능하다.
+// nickname은 public이므로 외부에서 접근이 가능하다.
+kamja.firstName // Error
+kamja.lastName // Error
+kamja.nickname // 가능
+```
+
+# 추상 클래스(abstract class), 추상 메소드
+
+- 추상클래스는 다른 클래스가 상속받을 수 있는 클래스이다.
+
+  - 추상 클래스는 직접 새로운 인스턴스를 만들 수 없다.
+    - 즉, 추상 클래스는 상속만 받을 수 있다.
+
+- 추상 메소드는 추상 클래스를 상속받는 모든 것들이 구현을 해야 하는 메소드를 의미한다.
+
+```js
+abstract class User{
+constructor(
+    private firstName: string,
+    private lastName: string,
+    public nickname: string
+  ){}
+  // 추상 메소드
+  // 메소드는 클래스 안에 존재하는 함수이다.
+
+  getFullName(){// getFullName()을 private으로 선언하면 외부에서 사용할 수 없다.
+    return `${this.firstName} ${this.lastName}`
+  } // Player 클래스는 User를 상속받았으므로 getFullName()을 사용할 수 있다.
+}
+class Player extends User{// User 추상 클래스는 getFullName 추상 메서드를 가지고 있기에 Player 클래스는 getFullName을 구현해야 한다.
+}
+const kamja = new Player("k","a","mja");
+const kokuma = new User("ko","ku","ma"); // Error 추상 클래스는 직접 인스턴스를 생성할 수 없다.
+kamja.getFullName() // Player 클래스는 User 추상 클래스를 상속받았으므로 getFullName()을 사용할 수 있다.
+```
