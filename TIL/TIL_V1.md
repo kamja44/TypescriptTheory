@@ -613,3 +613,54 @@ function makePlayer(player: Player){
 
 }
 ```
+
+# 다형성, 제네릭, 클래스, 인터페이스 모두 복습
+
+다형성
+
+- 다른 모양의 코드를 가질 수 있게 해준다.
+
+제네릭
+
+- palceholder 타입을 쓸 수 있도록 해준다.
+  - 사용자가 사용한 타입을 TS가 추론하여 concrete 타입으로 변형해준다.
+
+# 로컬 스토리지 API와 비슷한 API 생성
+
+Storage
+
+- 기존에 존재하는 인터페이스
+
+```js
+interface SStorage<T> {
+  [key: string]: T
+}
+class LocalStorage<T>  { // LocalStorage를 초기화할 때 TS에게 T라고 불리는 제네릭을받는다.
+  // 클래스에서 받은 제네릭을 interface(SStorage)에 보내줄 수 있다.
+  private storage : SStorage<T> = { }
+  set(key: string, value: T){
+    this.storage[key] = value;
+  }
+  remove(key: string){
+    delete this.storage[key]
+  }
+  get(key: string): T{ // return type이 generic(T)
+    return this.storage[key]
+  }
+  clear(){ // sotrage 비우기
+    this.storage={}
+  }
+}
+
+// 클래스 사용
+
+// string 타입의 class
+const stringStorage = new LocalStorage<string>() // string 타입의 class를 사용한다고 명시
+stringStorage.get("kamja"); // string을 보내주고 string을 받는다.
+stringStorage.set("hello", "how are you")
+
+// boolean 타입의 class
+const booleanStorage = new LocalStorage<boolean>(); // boolean 타입의 class를 사용한다고 명시
+booleanStorage.get("xxx") // string을 보내주고 boolean을 받는다.
+booleanStorage.set("hello", true)
+```
