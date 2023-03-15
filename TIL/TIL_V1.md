@@ -448,3 +448,48 @@ const kamja = new Word("kamja", "감자"); // 단어 생성
 Dict.add(kamja); // 생성한 dictionary에 단어 추가
 Dict.def("kamja"); // kamja 단어 찾기
 ```
+
+# interface
+
+- 객체의 모양을 특정해주기 위해 사용한다.
+- 인터페이스를 여러개 생성하면 TS가 하나로 합쳐준다.
+  - 즉, 같은 인터페이스에 다른 이름을 가진 property들을 쌓을 수 있다.
+
+```js
+// type만 가능한 문법
+type Team = "red" | "blue" | "yellow"; // 타입 Team은 red, blue, yellow 3개 중 하나의 값만 가질 수 있다.
+type Health = 1 | 5 | 10; // 타입 Health은 1, 5, 10 3개 중 하나의 값만 가질 수 있다.
+
+// type 사용
+type kamja = string;
+type Player = {
+  nickname: string,
+  team: string,
+  health: nubmer,
+};
+const kokuma: kamja = "potato";
+
+// interface 사용
+interface Player {
+  nickname: string;
+  team: string;
+  health: nubmer;
+}
+const kamja: Player = {
+  nickname: "kamja",
+  team: "kokuma",
+  health: 1,
+};
+```
+
+## interface 상속
+
+```js
+interface User {
+  name: string;
+}
+interface Player extends User {}
+const kamja: Player = {
+  name: "kamja",
+};
+```
