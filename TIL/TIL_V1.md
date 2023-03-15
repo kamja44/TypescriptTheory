@@ -21,6 +21,12 @@
 10. [추상 클래스(abstract class), 추상 메소드](#추상-클래스abstract-class-추상-메소드)<br>
 11. [private, protected, public 구분](#private-protected-public-구분)<br>
 12. [해시맵 만들기](#해시맵-만들기)<br>
+    &nbsp;&nbsp;12-1. [Object의 타입 선언하기](#object의-타입-선언하기)<br>
+13. [interface](#interface)<br>
+    &nbsp;&nbsp;13-1. [interface 상속](#interface-상속)<br>
+    &nbsp;&nbsp;13-2. [추상클래스를 인터페이스로 바꾸기](#추상클래스를-인터페이스로-바꾸기)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;13-2-1. [implements]<br>
+    &nbsp;&nbsp;13-3. [interface, class를 타입으로 사용하기](#interface-class를-타입으로-사용하기)
 
 # TS 기본 타입
 
@@ -492,4 +498,118 @@ interface Player extends User {}
 const kamja: Player = {
   name: "kamja",
 };
+```
+
+복습
+
+```js
+// 추상 클래스
+// 추상 클래스는 인스턴스를 생성할 수 없다. -> new User 불가능 -> 왜? User가 추상클래스이기 때문에
+// 추상클래스는 User 클래스를 상속 받는 다른 클래스가 가질 property와 메소드를 지정해준다.
+abstract class User{
+  constructor(
+    // 변수를 protected로 설정하면 상속받은 클래스는 접근할 수 있다.
+    protected firstName: string,
+    protected lastName: string
+  ){}
+  abstract sayHi(name: string): string // 추상메서드
+  abstract fullName(): string // 추상메서드
+}
+// 즉, User 추상클래스를 상속한다면 추상메서드인 sayHi와 fullName을 구현해야 하고 firstName과 lastName을 갖는다.
+
+class Player extends User{
+  fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
+  sayHi(name: string){
+    return `Hello ${name}. My name is ${this.fullName()}`
+  }
+}
+```
+
+## 추상클래스를 인터페이스로 바꾸기
+
+- 인터페이스는 생성자와 추상메서드가 없다.
+- 하지만, 인터페이스는 오브젝트나 클래스의 모양을 묘사할 수 있다.
+
+### implements
+
+- implements는 인터페이스를 상속해야 한다는 것을 의미한다.
+  - 인터페이스를 상속할 때는 property를 private, protected으로 만들지 못한다.
+    - property를 public으로 만들어야 한다.
+  - `여러개의 인터페이스도 상속할 수 있다.`
+- 기존의 코드는 interface를 이용하여 상속을 알렸는데 implements를 이용하여 상속을 알릴 수 있다.
+- implement는 JS에서 사용할 수 없는 문법이기에 코드가 가벼워진다. -> TS 컴파일러가 JS로 컴파일 하지 않는다.
+
+```js
+interface User{
+  firstName: string,
+  lastName: string,
+  sayHi(name: string): string
+  fullName(): string
+}
+interface Human{
+  health: number
+}
+class Player implements User, Human{
+  constructor(
+     firstName: string,
+     lastName: string,
+     public health: number
+  ){}
+    fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
+  sayHi(name: string){
+    return `Hello ${name}. My name is ${this.fullName()}`
+  }
+}
+```
+
+## interface, class를 타입으로 사용하기
+
+```js
+interface User{
+  firstName: string,
+  lastName: string,
+  sayHi(name: string): string
+  fullName(): string
+}
+interface Human{
+  health: number
+}
+class Player implements User, Human{
+  constructor(
+     firstName: string,
+     lastName: string,
+     public health: number
+  ){}
+    fullName(){
+    return `${this.firstName} ${this.lastName}`
+  }
+  sayHi(name: string){
+    return `Hello ${name}. My name is ${this.fullName()}`
+  }
+}
+
+// interface를 타입으로 사용하기
+function makeUser(user: User): User{ // 결과값으로  interface 리턴
+  return {
+  firstName: "kamja",
+  lastName: "las",
+  fullName: () => "xxxx",
+  sayHi: (name) => "string"
+}
+}
+makeUser({
+  firstName: "kamja",
+  lastName: "las",
+  fullName: () => "xxxx",
+  sayHi: (name) => "string"
+})
+
+// class를 타입으로 사용하기
+function makePlayer(player: Player){
+
+}
 ```
